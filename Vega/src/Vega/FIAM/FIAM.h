@@ -35,7 +35,7 @@ namespace LM
         double rho  = 0.01;
         double hz = 0.2;
         double v = 400.0;
-        double t = 1;
+        double t = 1.0;
         double s = 0.2;
     };
 

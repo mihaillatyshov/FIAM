@@ -10,10 +10,12 @@
 namespace LM
 {
 
-    std::string operator"" S(const char8_t* str, std::size_t) {
+    std::string operator"" S(const char8_t* str, std::size_t)
+    {
         return reinterpret_cast<const char*>(str);
     }
-    char const* operator"" C(const char8_t* str, std::size_t) {
+    char const* operator"" C(const char8_t* str, std::size_t)
+    {
         return reinterpret_cast<const char*>(str);
     }
 
@@ -30,7 +32,8 @@ namespace LM
         SetMaterialNameId(Mat_AMr6);
     }
 
-    void FIAM::SetMaterialNameId(std::string _MatName) {
+    void FIAM::SetMaterialNameId(std::string _MatName)
+    {
         auto it = std::find_if(m_MaterialNames.begin(), m_MaterialNames.end(), [&](const char* name) {
             return strcmp(name, _MatName.c_str()) == 0;
             });
@@ -86,6 +89,11 @@ namespace LM
                 Calculate();
             }
             ImGui::Separator();
+            if (ImGui::Button("Var 4"))
+            {
+                m_Data = { 20.0, 0.8, -5.0, 60.0, 5.0, 20.0, 1.2, 0.01, 0.2, 400.0, 1.0, 0.2 };
+                SetMaterialNameId(Mat_AMr6);
+            }
             if (ImGui::Button("Var 9"))
             {
                 m_Data = { 40.0, 0.7, 5.0, 45.0, 10.0, 12.0, 0.6, 0.027, 0.5, 240.0, 2.0, 0.3 };
@@ -112,27 +120,27 @@ namespace LM
             }
             switch (m_Status)
             {
-            case Status::kStart:
-                ImGui::Text("Click Calculate!");
-                break;
-            case Status::kError:
-                ImGui::Text("You got some ERROR!!!");
-                break;
-            case Status::kOk:
-                ImGui::Text("Schema: %d", m_Scheme);
-                ImGui::Text("h1: %lf", m_Result.h1);
-                ImGui::Text("h2: %lf", m_Result.h2);
-                ImGui::Text("h3: %lf", m_Result.h3);
-                ImGui::Text("h4: %lf", m_Result.h4);
-                ImGui::Text("Rz: %lf", m_Result.Rz);
-                DrawH1();
-                DrawH2();
-                DrawH3();
-                DrawRz();
-                DrawSchemes();
-                break;
-            default:
-                break;
+                case Status::kStart:
+                    ImGui::Text("Click Calculate!");
+                    break;
+                case Status::kError:
+                    ImGui::Text("You got some ERROR!!!");
+                    break;
+                case Status::kOk:
+                    ImGui::Text("Schema: %d", m_Scheme);
+                    ImGui::Text("h1: %lf", m_Result.h1);
+                    ImGui::Text("h2: %lf", m_Result.h2);
+                    ImGui::Text("h3: %lf", m_Result.h3);
+                    ImGui::Text("h4: %lf", m_Result.h4);
+                    ImGui::Text("Rz: %lf", m_Result.Rz);
+                    DrawH1();
+                    DrawH2();
+                    DrawH3();
+                    DrawRz();
+                    DrawSchemes();
+                    break;
+                default:
+                    break;
             }
         }
         ImGui::End();
@@ -207,33 +215,6 @@ namespace LM
     {
         using namespace std::placeholders;
 
-        //if (m_Data.r >= 0 && m_Data.r <= (s / 2.0))
-        //{
-        //    _Scheme = 1;
-        //    return std::bind(&FIAM::Calculate1, this, _1, _2, _3);
-        //}
-        //
-        //if ((glm::radians(m_Data.phi) >= glm::asin(s / (2.0 * m_Data.r))) && (glm::radians(m_Data.phi1) >= glm::asin(s / (2.0 * m_Data.r))))
-        //{
-        //    _Scheme = 2;
-        //    return std::bind(&FIAM::Calculate2, this, _1, _2, _3);
-        //}
-        //
-        //if ((glm::radians(m_Data.phi) >= glm::asin(s / (2.0 * m_Data.r))) && (glm::radians(m_Data.phi1) <= glm::asin(s / (2.0 * m_Data.r))))
-        //{
-        //    _Scheme = 3;
-        //    return std::bind(&FIAM::Calculate3, this, _1, _2, _3);
-        //}
-        //
-        //if ((glm::radians(m_Data.phi) <= glm::asin(s / (2.0 * m_Data.r))) && (glm::radians(m_Data.phi1) >= glm::asin(s / (2.0 * m_Data.r))))
-        //{
-        //    _Scheme = 4;
-        //    return std::bind(&FIAM::Calculate4, this, _1, _2, _3);
-        //}
-        //
-        //_Scheme = 5;
-        //return std::bind(&FIAM::Calculate5, this, _1, _2, _3);
-
         double phi = glm::radians(m_Data.phi);
         double phi1 = glm::radians(m_Data.phi1);
 
@@ -276,6 +257,7 @@ namespace LM
             double tauS = 0.75 * m_Materials[m_MaterialNames[m_SelectedMaterialId]].sigmaB;
             double sigma02 = m_Materials[m_MaterialNames[m_SelectedMaterialId]].sigma02;
             double bs = 1000.0 * 0.5 * m_Data.rho * (1.0 - tauS / glm::sqrt(tauS * tauS + sigma02 * sigma02));
+
             LOGE("TauS: ", tauS);
             LOGE("BS: ", bs);
 
@@ -325,9 +307,6 @@ namespace LM
 
     void FIAM::Calculate1(ResultFIAM& _Result, double s, double bs)
     {
-        //_Result.h1 = s * ((glm::sin(glm::radians(m_Data.phi)) * glm::sin(glm::radians(m_Data.phi1)))
-        //    / (glm::sin(glm::radians(m_Data.phi)) + glm::sin(glm::radians(m_Data.phi1))));
-
         _Result.h1 = m_Data.r * (1.0 - glm::cos(glm::radians(m_Data.phi)))
             + (
                 s -
@@ -367,14 +346,6 @@ namespace LM
 
     void FIAM::Calculate5(ResultFIAM& _Result, double s, double bs)
     {
-        //_Result.h1 = m_Data.r * (1.0 - glm::cos(glm::radians(m_Data.phi))) / 2.5
-        //    + ((glm::tan(glm::radians(m_Data.phi)) * glm::tan(glm::radians(m_Data.phi1)) * (s - m_Data.r * (glm::sin(glm::radians(m_Data.phi)) 
-        //            + glm::sin(glm::radians(m_Data.phi1))))
-        //        - (m_Data.r * glm::tan(glm::radians(m_Data.phi)) * (glm::cos(glm::radians(m_Data.phi))
-        //            - glm::cos(glm::radians(m_Data.phi))))) 
-        //
-        //        / (glm::tan(glm::radians(m_Data.phi)) + glm::tan(glm::radians(m_Data.phi1))));
-
         _Result.h1 = m_Data.r * (1.0 - glm::cos(glm::radians(m_Data.phi))) +
             (
                 glm::tan(glm::radians(m_Data.phi)) * glm::tan(glm::radians(m_Data.phi1)) *
