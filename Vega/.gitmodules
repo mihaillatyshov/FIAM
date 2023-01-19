@@ -1,0 +1,13 @@
+[submodule "vendor/imgui"]
+	path = vendor/imgui
+	url = https://github.com/mihaillatyshov/imgui.git
+	branch = docking
+[submodule "vendor/glew"]
+	path = vendor/glew
+	url = https://github.com/mihaillatyshov/glew.git
+[submodule "vendor/glfw"]
+	path = vendor/glfw
+	url = https://github.com/mihaillatyshov/glfw.git
+[submodule "vendor/glm"]
+	path = vendor/glm
+	url = https://github.com/g-truc/glm.git

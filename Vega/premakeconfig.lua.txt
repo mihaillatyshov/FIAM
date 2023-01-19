@@ -1,0 +1,5 @@
+BUILD_OGL2      = false
+BUILD_OGL3      = false
+BUILD_OGL4      = true
+BUILD_DX        = false
+BUILD_VULKAN    = false
